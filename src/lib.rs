@@ -143,4 +143,44 @@ impl IoTDataProcessor {
     pub fn print_final_state(&mut self) -> U256 {
         self.final_state.get()
     }
+
+    pub fn encrypt(&mut self,message: U256, public_key: (U256, U256)) -> U256 {
+        let (e, n) = public_key;
+        self.mod_exp(message, e, n) // Modular exponentiation
+    }
+
+    pub fn decrypt(&mut self,cipher: U256, private_key: (U256, U256)) -> U256 {
+        let (d, n) = private_key;
+        self.mod_exp(cipher, d, n) // Modular exponentiation
+    }
+
+    /// Efficient modular exponentiation (base^exp % modulus)
+    pub fn mod_exp(&mut self,mut base: U256, mut exp: U256, modulus: U256) -> U256 {
+        let mut result: U256 = U256::from(1);
+        base %= modulus;
+        while exp > U256::from(0) {
+            if exp % U256::from(2) == U256::from(1) {
+                result = (result * base) % modulus;
+            }
+            exp /= U256::from(2);
+            base = (base * base) % modulus;
+        }
+        result
+    }
+
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_rsa(){
+        use stylus_sdk::{console, testing::*};
+        let vm = TestVM::default();
+        let mut contract = IoTDataProcessor::from(&vm);
+        
+        let res = contract.encrypt(U256::from(56), (U256::from(65537), U256::from(3233)));
+        console!(res);
+    }
 }
