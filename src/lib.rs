@@ -24,6 +24,9 @@ pub struct IoTDataProcessor {
     max_vib2: StorageU256,
 
     final_state: StorageU256, // 0: Needs to be checked, 1: Okay, 2: Not okay
+
+    public_key_e: StorageU256,
+    public_key_n: StorageU256, 
 }
 
 
@@ -36,7 +39,9 @@ impl IoTDataProcessor {
         min_hum: U256,
         max_hum: U256,
         max_vib1: U256,
-        max_vib2: U256 
+        max_vib2: U256,
+        public_key_e: U256,
+        public_key_n: U256,
     ) {
         let tmp = U256::from(0);
         self.final_state.set(tmp);
@@ -46,6 +51,8 @@ impl IoTDataProcessor {
         self.max_hum.set(max_hum);
         self.max_vib1.set(max_vib1);
         self.max_vib2.set(max_vib2);
+        self.public_key_e.set(public_key_e);
+        self.public_key_n.set(public_key_n);
     }
 
     pub fn store_sensor_data(
@@ -55,7 +62,15 @@ impl IoTDataProcessor {
         vibration1: U256,
         vibration2: U256,
         gyro: U256,
+        signature: U256,
     ) {
+        // Verify the signature using the public key
+        let hash = temperature + humidity + vibration1 + vibration2 + gyro;
+        if hash != self.decrypt(signature, (self.public_key_e.get(), self.public_key_n.get())) {
+            // Signature verification failed
+            panic!("Signature verification failed");
+        }
+
         self.temperature.push(temperature);
         self.humidity.push(humidity);
         self.vibration1.push(vibration1);

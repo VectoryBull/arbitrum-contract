@@ -53,7 +53,7 @@ if __name__ == "__main__":
     print(public_key, private_key)
     
     # Original message (must be smaller than n = p*q)
-    for message in [56]:
+    for message in [56, 5]:
         
         # Encryption
         cipher = encrypt(message, public_key)
