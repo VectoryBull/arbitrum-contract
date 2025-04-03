@@ -40,6 +40,12 @@ impl IoTDataProcessor {
     ) {
         let tmp = U256::from(0);
         self.final_state.set(tmp);
+        self.min_temp.set(min_temp);
+        self.max_temp.set(max_temp);
+        self.min_hum.set(min_hum);
+        self.max_hum.set(max_hum);
+        self.max_vib1.set(max_vib1);
+        self.max_vib2.set(max_vib2);
     }
 
     pub fn store_sensor_data(
@@ -83,38 +89,38 @@ impl IoTDataProcessor {
         for i in 0..self.temperature.len() {
             let temp = self.temperature.get(i).unwrap();
             if !self.is_temperature_within_bounds(temp) {
-            all_within_bounds = false;
-            break;
+                all_within_bounds = false;
+                break;
             }
         }
 
         if all_within_bounds {
             for i in 0..self.humidity.len() {
-            let hum = self.humidity.get(i).unwrap();
-            if !self.is_humidity_within_bounds(hum) {
-                all_within_bounds = false;
-                break;
-            }
+                let hum = self.humidity.get(i).unwrap();
+                if !self.is_humidity_within_bounds(hum) {
+                    all_within_bounds = false;
+                    break;
+                }
             }
         }
 
         if all_within_bounds {
             for i in 0..self.vibration1.len() {
-            let vib1 = self.vibration1.get(i).unwrap();
-            if !self.is_vibration1_within_bounds(vib1) {
-                all_within_bounds = false;
-                break;
-            }
+                let vib1 = self.vibration1.get(i).unwrap();
+                if !self.is_vibration1_within_bounds(vib1) {
+                    all_within_bounds = false;
+                    break;
+                }
             }
         }
 
         if all_within_bounds {
             for i in 0..self.vibration2.len() {
-            let vib2 = self.vibration2.get(i).unwrap();
-            if !self.is_vibration2_within_bounds(vib2) {
-                all_within_bounds = false;
-                break;
-            }
+                let vib2 = self.vibration2.get(i).unwrap();
+                if !self.is_vibration2_within_bounds(vib2) {
+                    all_within_bounds = false;
+                    break;
+                }
             }
         }
 
