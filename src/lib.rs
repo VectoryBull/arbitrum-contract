@@ -23,7 +23,7 @@ pub struct IoTDataProcessor {
     max_vib1: StorageU256,
     max_vib2: StorageU256,
 
-    FINAL_STATE: StorageU256, // 0: Needs to be checked, 1: Okay, 2: Not okay
+    final_state: StorageU256, // 0: Needs to be checked, 1: Okay, 2: Not okay
 }
 
 
@@ -37,9 +37,9 @@ impl IoTDataProcessor {
         max_hum: U256,
         max_vib1: U256,
         max_vib2: U256 
-        ) {
+    ) {
         let tmp = U256::from(0);
-        self.FINAL_STATE.set(tmp);
+        self.final_state.set(tmp);
     }
 
     pub fn store_sensor_data(
@@ -57,21 +57,21 @@ impl IoTDataProcessor {
         self.gyro.push(gyro);
     }
 
-    fn is_temperature_within_bounds(&self, temperature: U256) -> bool {
+    fn is_temperature_within_bounds(&mut self, temperature: U256) -> bool {
         temperature >= self.min_temp.get() && 
         temperature <= self.max_temp.get()
     }
 
-    fn is_humidity_within_bounds(&self, humidity: U256) -> bool {
+    fn is_humidity_within_bounds(&mut self, humidity: U256) -> bool {
         humidity >= self.min_hum.get() && 
         humidity <= self.max_hum.get()
     }
 
-    fn is_vibration1_within_bounds(&self, vibration1: U256) -> bool {
+    fn is_vibration1_within_bounds(&mut self, vibration1: U256) -> bool {
         vibration1 <= self.max_vib1.get()
     }
 
-    fn is_vibration2_within_bounds(&self, vibration2: U256) -> bool {
+    fn is_vibration2_within_bounds(&mut self, vibration2: U256) -> bool {
         vibration2 <= self.max_vib2.get()
     }
 
@@ -121,20 +121,20 @@ impl IoTDataProcessor {
         if all_within_bounds {
             // All data is within bounds, proceed with termination logic
             let tmp = U256::from(1);
-            self.FINAL_STATE.set(tmp); // Okay
+            self.final_state.set(tmp); // Okay
         } else {
             // Handle the case where some data is out of bounds
             let tmp = U256::from(2);
-            self.FINAL_STATE.set(tmp); // Not okay
+            self.final_state.set(tmp); // Not okay
         }
     }
 
     pub fn print_temp(&mut self,
-    i: U256) -> Signed<256, 4> {
+    i: U256) -> U256 {
         self.temperature.get(i).unwrap()
     }
 
     pub fn print_final_state(&mut self) -> U256 {
-        self.FINAL_STATE.get()
+        self.final_state.get()
     }
 }
