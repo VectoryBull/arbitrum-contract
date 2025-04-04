@@ -69,9 +69,9 @@ impl IoTDataProcessor {
         vibration1: U256,
         vibration2: U256,
         gyro: U256,
-        signature: U256,
         lat: U256,
         lng: U256,
+        signature: U256,
     ) {
         // Verify the signature using the public key
         let hash = temperature + humidity + vibration1 + vibration2 + gyro;
