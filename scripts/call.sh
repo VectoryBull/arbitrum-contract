@@ -13,10 +13,10 @@ cast send --rpc-url $RPC_URL --private-key $PK \
 $CONTRACT "init(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)" 0 10 10 0 10 10 10 2753 3233
 
 cast send --rpc-url $RPC_URL --private-key $PK \
-$CONTRACT "storeSensorData(uint256,uint256,uint256,uint256,uint256,uint256)" 1 1 1 1 1 3086
+$CONTRACT "storeSensorData(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)" 1 1 1 1 1 1 1 3086
 
 cast send --rpc-url $RPC_URL --private-key $PK \
-$CONTRACT "storeSensorData(uint256,uint256,uint256,uint256,uint256,uint256)" 1 1 1 1 1 3
+$CONTRACT "storeSensorData(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)" 1 1 1 1 1 1 1 3
 
 cast call --rpc-url $RPC_URL \
 --private-key $PK \

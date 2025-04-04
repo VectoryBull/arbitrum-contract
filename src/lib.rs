@@ -16,6 +16,9 @@ pub struct IoTDataProcessor {
     vibration2: StorageVec<StorageU256>,
     gyro: StorageVec<StorageU256>,
 
+    lat: StorageVec<StorageU256>,
+    lng: StorageVec<StorageU256>,
+
     min_temp: StorageU256,
     max_temp: StorageU256,
     max_temp_change: StorageU256,
@@ -67,6 +70,8 @@ impl IoTDataProcessor {
         vibration2: U256,
         gyro: U256,
         signature: U256,
+        lat: U256,
+        lng: U256,
     ) {
         // Verify the signature using the public key
         let hash = temperature + humidity + vibration1 + vibration2 + gyro;
@@ -80,6 +85,8 @@ impl IoTDataProcessor {
         self.vibration1.push(vibration1);
         self.vibration2.push(vibration2);
         self.gyro.push(gyro);
+        self.lat.push(lat);
+        self.lng.push(lng);
     }
 
     fn is_temperature_within_bounds(&mut self, temperature: U256) -> bool {

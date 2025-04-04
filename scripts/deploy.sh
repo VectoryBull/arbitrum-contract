@@ -13,3 +13,4 @@ cargo stylus deploy \
   --endpoint=$RPC_URL \
   --private-key=$PK
 
+cargo stylus export-abi > abi.json

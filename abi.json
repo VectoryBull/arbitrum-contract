@@ -7,9 +7,9 @@
 pragma solidity ^0.8.23;
 
 interface IIoTDataProcessor  {
-    function init(uint256 min_temp, uint256 max_temp, uint256 min_hum, uint256 max_hum, uint256 max_vib1, uint256 max_vib2, uint256 public_key_e, uint256 public_key_n) external;
+    function init(uint256 min_temp, uint256 max_temp, uint256 max_temp_change, uint256 min_hum, uint256 max_hum, uint256 max_vib1, uint256 max_vib2, uint256 public_key_e, uint256 public_key_n) external;
 
-    function storeSensorData(uint256 temperature, uint256 humidity, uint256 vibration1, uint256 vibration2, uint256 gyro, uint256 signature) external;
+    function storeSensorData(uint256 temperature, uint256 humidity, uint256 vibration1, uint256 vibration2, uint256 gyro, uint256 signature, uint256 lat, uint256 lng) external;
 
     function isTemperatureWithinBounds(uint256 temperature) external returns (bool);
 
