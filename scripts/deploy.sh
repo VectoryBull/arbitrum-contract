@@ -1,4 +1,15 @@
+#!/usr/bin/env bash
+. ./scripts/.env
+
+if [ "$ENV" = "test" ]; then
+    # Commands to execute if $var equals "test"
+    . ./scripts/.env.test
+else
+    # Commands to execute if $var does not equal "test"
+    . ./scripts/.env.prod
+fi
+
 cargo stylus deploy \
-  --endpoint='http://127.0.0.1:8547' \
-  --private-key="0xb6b15c8cb491557369f3c7d2c287b053eb229daa9c22138887752191c9520659"
+  --endpoint=$RPC_URL \
+  --private-key=$PK
 
