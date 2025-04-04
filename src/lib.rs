@@ -18,6 +18,8 @@ pub struct IoTDataProcessor {
 
     min_temp: StorageU256,
     max_temp: StorageU256,
+    max_temp_change: StorageU256,
+
     min_hum: StorageU256,
     max_hum: StorageU256,
     max_vib1: StorageU256,
@@ -36,6 +38,7 @@ impl IoTDataProcessor {
     pub fn init(&mut self,
         min_temp: U256,
         max_temp: U256,
+        max_temp_change: U256,
         min_hum: U256,
         max_hum: U256,
         max_vib1: U256,
@@ -47,6 +50,7 @@ impl IoTDataProcessor {
         self.final_state.set(tmp);
         self.min_temp.set(min_temp);
         self.max_temp.set(max_temp);
+        self.max_temp_change.set(max_temp_change);
         self.min_hum.set(min_hum);
         self.max_hum.set(max_hum);
         self.max_vib1.set(max_vib1);
@@ -106,6 +110,26 @@ impl IoTDataProcessor {
             if !self.is_temperature_within_bounds(temp) {
                 all_within_bounds = false;
                 break;
+            }
+        }
+
+        if all_within_bounds {
+            for i in 1..self.temperature.len() {
+                let current_temp = self.temperature.get(i).unwrap();
+                let previous_temp = self.temperature.get(i - 1).unwrap();
+                
+                // Calculate the absolute difference (discrete derivative)
+                let difference = if current_temp > previous_temp {
+                    current_temp - previous_temp
+                } else {
+                    previous_temp - current_temp
+                };
+                
+                // Check if the difference exceeds the maximum allowed rate of change
+                if U256::from(difference) > self.max_temp_change.get() {  // Assumes max_temp_change is a U256 field in your struct
+                    all_within_bounds = false;
+                    break;
+                }
             }
         }
 
